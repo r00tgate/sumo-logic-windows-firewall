@@ -28,10 +28,14 @@ info — Displays an entry that depends on the type of action that occurred.
 path — Displays the direction of the communication. The options available are SEND, RECEIVE, FORWARD, and UNKNOWN.  
   
 To parse the statistical data from the logs use the following:  
-`parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port`  
+```
+parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port
+```  
 
 To parse the full log, use the following:  
-`parse "* * * * * * * * * * * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path`  
+```
+parse "* * * * * * * * * * * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path
+```  
   
 To count/group by destination ports:  
 ```
@@ -44,28 +48,34 @@ _sourceCategory="uploads/windows/firewall"
 ```  
 
 To count/group by source ports:  
-`_sourceCategory="uploads/windows/firewall"  
+```
+_sourceCategory="uploads/windows/firewall"  
 | parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
 | where Source_Port <> "-"  
 | number(Source_Port)  
 | where Source_Port <=49151 //Registered ports  
 | count by Source_Port, Protocol  
-| sort by _count`  
+| sort by _count
+```  
   
 A lookup file can be added to categorize the service:  
-`| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
+```
+| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
 | where Destination_Port <> "-"  
 | lookup Service, Description from https://raw.githubusercontent.com/r00tgate/sumo-logic-windows-firewall/master/ports_services.csv on Destination_Port=Port  
 | num(Destination_Port)  
 | count by Destination_Port, Protocol, Service, Description  
-| sort by _count`  
+| sort by _count
+```  
   
-`_sourceCategory="uploads/windows/firewall"  
+```
+_sourceCategory="uploads/windows/firewall"  
 | parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
 | where Source_Port <> "-"  
 | lookup Service, Description from https://raw.githubusercontent.com/r00tgate/sumo-logic-windows-firewall/master/ports_services.csv on Destination_Port=Port  
 | number(Source_Port)  
 | where Source_Port <=49151 //Registered ports  
 | count by Source_Port, Protocol, Service, Description  
-| sort by _count`  
+| sort by _count
+```  
   
