@@ -38,45 +38,57 @@ parse "* * * * * * * * * * * * * * * * *" as Date, Time, Action, Protocol, Sourc
 
 ```  
   
-To count/group by destination ports:  
+To count/group by egress traffic:  
 ```
-_sourceCategory="uploads/windows/firewall"  
-| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
+_sourceCategory="uploads/windows/firewall"
+| parse "* * * * * * * * * * * * * * * * *" as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path
+| where Path="SEND"
 | where Destination_Port <> "-"  
 | num(Destination_Port)  
-| count by Destination_Port, Protocol  
+| Path as Direction
+| where Destination_Port <=49151 //Registered ports  
+| count by Destination_Port, Protocol, Service, Description, Direction
 | sort by _count
 ```  
 
-To count/group by source ports:  
+To count/group by ingress traffic:  
 ```
-_sourceCategory="uploads/windows/firewall"  
-| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
-| where Source_Port <> "-"  
-| number(Source_Port)  
-| where Source_Port <=49151 //Registered ports  
-| count by Source_Port, Protocol  
+_sourceCategory="uploads/windows/firewall"
+| parse "* * * * * * * * * * * * * * * * *" as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path
+| where Path="RECEIVE"
+| where Destination_Port <> "-"  
+| num(Destination_Port)  
+| Path as Direction
+| where Destination_Port <=49151 //Registered ports  
+| count by Destination_Port, Protocol, Service, Description, Direction
 | sort by _count
 ```  
   
 A lookup file can be added to categorize the service:  
 ```
-| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
+_sourceCategory="uploads/windows/firewall"
+| parse "* * * * * * * * * * * * * * * * *" as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path
+| where Path="SEND"
 | where Destination_Port <> "-"  
 | lookup Service, Description from https://raw.githubusercontent.com/r00tgate/sumo-logic-windows-firewall/master/ports_services.csv on Destination_Port=Port  
 | num(Destination_Port)  
-| count by Destination_Port, Protocol, Service, Description  
+| Path as Direction
+| count by Destination_Port, Protocol, Service, Description, Direction
 | sort by _count
+
 ```  
   
 ```
-_sourceCategory="uploads/windows/firewall"  
-| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
-| where Source_Port <> "-"  
+_sourceCategory="uploads/windows/firewall"
+| parse "* * * * * * * * * * * * * * * * *" as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path
+| where Path="RECEIVE"
+| where Destination_Port <> "-"  
 | lookup Service, Description from https://raw.githubusercontent.com/r00tgate/sumo-logic-windows-firewall/master/ports_services.csv on Destination_Port=Port  
-| number(Source_Port)  
-| where Source_Port <=49151 //Registered ports  
-| count by Source_Port, Protocol, Service, Description  
+| num(Destination_Port)  
+| Path as Direction
+| where Destination_Port <=49151 //Registered ports  
+| count by Destination_Port, Protocol, Service, Description, Direction
 | sort by _count
+
 ```  
   
