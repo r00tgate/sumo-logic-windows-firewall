@@ -34,8 +34,8 @@ To parse the full log, use the following:
 `parse "* * * * * * * * * * * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port, Size, TCP_Flags, TCP_SYN, TCP_ACK, TCP_Win, ICMP_Type, ICMP_Code, Info, Path`  
   
 To count/group by destination ports:  
-`_sourceCategory="uploads/windows/firewall"  
-| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  
+`_sourceCategory="uploads/windows/firewall"  <br />
+| parse "* * * * * * * * " as Date, Time, Action, Protocol, Source_IP, Destination_IP, Source_Port, Destination_Port  <br />
 | where Destination_Port <> "-"  
 | num(Destination_Port)  
 | count by Destination_Port, Protocol  
