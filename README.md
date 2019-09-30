@@ -1,12 +1,12 @@
-You don't need to use regex to parse those windows firewall logs. You can use parse anchor instead. The trick is that since there are no labels in the log you need to start from the beginning of the log line. 
-
-According to the [Microsoft Technet]: https://technet.microsoft.com/en-us/library/cc758040%28v=ws.10%29.aspx documentation the header of the log file contains:
-
-Version — Displays which version of the Windows Firewall security log is installed.
-Software — Displays the name of the software creating the log.
-Time — Indicates that all the timestamp information in the log are in local time.
-Fields — Displays a list of fields that are available for security log entries, if data is available.
-
+You don't need to use regex to parse those windows firewall logs. You can use parse anchor instead. The trick is that since there are no labels in the log you need to start from the beginning of the log line.   
+  
+According to the [Microsoft Technet]: https://technet.microsoft.com/en-us/library/cc758040%28v=ws.10%29.aspx documentation the header of the log file contains:  
+  
+Version — Displays which version of the Windows Firewall security log is installed.  
+Software — Displays the name of the software creating the log.  
+Time — Indicates that all the timestamp information in the log are in local time.  
+Fields — Displays a list of fields that are available for security log entries, if data is available.  
+  
 While the body of the log file contains:
 
 date — The date field identifies the date in the format YYYY-MM-DD.
