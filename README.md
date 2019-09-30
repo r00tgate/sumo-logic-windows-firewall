@@ -92,3 +92,7 @@ _sourceCategory="uploads/windows/firewall"
 
 ```  
   
+Documentation:  
+https://help.sumologic.com/05Search/Search-Query-Language/01-Parse-Operators/01-Parse-Predictable-Patterns-Using-an-Anchor  
+https://help.sumologic.com/05Search/Search-Query-Language/Search-Operators/lookup  
+https://help.sumologic.com/Visualizations-and-Alerts/Dashboards/Use-Time-Ranges-and-Filters/05Use-Filters-in-Dashboards   https://technet.microsoft.com/en-us/library/cc758040%28v=ws.10%29.aspx  
